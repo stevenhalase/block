@@ -15,7 +15,24 @@ class App extends Component {
     this.state = {
       APIService: new APIService(),
       LocationService: new LocationService(),
-      loadingMessage: 'Getting Location...'
+      loadingMessage: 'Getting Location...',
+      openConversations: [{
+        from: { name: 'Steve' },
+        to: { name: 'John' },
+        messages: [{
+          from: { name: 'Steve' },
+          to: { name: 'John' },
+          message: 'Hey man whats up?'
+        },{
+          from: { name: 'Steve' },
+          to: { name: 'John' },
+          message: 'Not much man'
+        },{
+          from: { name: 'Steve' },
+          to: { name: 'John' },
+          message: 'Cool beans'
+        }]
+      }]
     }
     
     this.openLoader = this.openLoader.bind(this);
@@ -40,7 +57,8 @@ class App extends Component {
               <BlockPageContainer>
                 <BlockDashboard 
                   apiservice={this.state.APIService} 
-                  locationservice={this.state.LocationService} />
+                  locationservice={this.state.LocationService}
+                  openconversations={this.state.openConversations} />
               </BlockPageContainer>
             )}/>
         </Switch>

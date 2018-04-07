@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import BlockNavigation from '../components/BlockNavigation';
 import BlockFeed from '../components/BlockFeed';
+import BlockPostEntry from '../components/BlockPostEntry';
+import BlockPeopleList from '../components/BlockPeopleList';
+import BlockConversation from '../components/BlockConversation';
 
 const style = {
   display: 'flex',
@@ -17,7 +20,7 @@ const navWrapperStyle = {
 }
 
 const feedWrapperStyle = {
-  marginTop: '125px'
+  marginTop: '140px'
 }
 
 class BlockDashboard extends Component {
@@ -30,8 +33,15 @@ class BlockDashboard extends Component {
           locationservice={this.props.locationservice} />
         </div>
         <div style={feedWrapperStyle}>
+          <BlockPostEntry />
           <BlockFeed apiservice={this.props.apiservice}/>
         </div>
+        <BlockPeopleList />
+        {this.props.openconversations.map((conversation, i) => {
+          return(
+            <BlockConversation conversation={conversation} />
+          )
+        })}
       </div>
     );
   }

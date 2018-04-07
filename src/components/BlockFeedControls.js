@@ -4,6 +4,10 @@ import Ionicon from 'react-ionicons';
 const style = {
   color: '#716DF9',
   flex: '0 0 100%',
+  display: 'flex',
+}
+
+const dateContainer = {
   margin: '0 5px 5px',
   display: 'flex',
   cursor: 'pointer',
@@ -22,14 +26,16 @@ class BlockFeedControls extends Component {
   }
   render() {
     return (
-      <div className="BlockFeedControls" style={style} onClick={this.props.handledatetoggle}>
-        <span style={dateStyle}>
-          Date
-        </span>
-        <Ionicon 
-          icon={this.props.descending ? 'ios-arrow-down' : 'ios-arrow-up'} 
-          color="#716DF9" 
-          fontSize="16px" />
+      <div className="BlockFeedControls" style={style}>
+        <div onClick={this.props.handledatetoggle} style={dateContainer}>
+          <span style={dateStyle}>
+            Date
+          </span>
+          <Ionicon 
+            icon={this.props.descending ? 'ios-arrow-down' : 'ios-arrow-up'} 
+            color="#716DF9" 
+            fontSize="16px" />
+        </div>
       </div>
     );
   }
