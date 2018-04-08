@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 
-const style = {
+const lightStyle = {
   color: '#FFF'
+}
+
+const darkStyle = {
+  color: '#716DF9'
 }
 
 const logoStyle = {
@@ -12,7 +16,7 @@ const logoStyle = {
 class BlockLogo extends Component {
   render() {
     return (
-      <div className="BlockLogo" style={style}>
+      <div className="BlockLogo" style={this.props.dark ? darkStyle : lightStyle}>
         <h2 style={logoStyle}>BLOCK</h2>
       </div>
     );

@@ -3,11 +3,13 @@ import { Switch, Route } from 'react-router-dom';
 
 import APIService from './services/APIService';
 import LocationService from './services/LocationService';
-import BlockDashboard from './pages/BlockDashboard';
+import BlockDashboardPage from './pages/BlockDashboardPage';
 
 import './App.css';
 import BlockPageContainer from './components/BlockPageContainer';
 import BlockLoader from './components/BlockLoader';
+import BlockAuthorizationPage from './pages/BlockAuthorizationPage';
+import BlockAlert from './components/BlockAlert';
 
 class App extends Component {
   constructor(props) {
@@ -15,7 +17,7 @@ class App extends Component {
     this.state = {
       APIService: new APIService(),
       LocationService: new LocationService(),
-      loadingMessage: 'Getting Location...',
+      user: null,
       openConversations: [{
         from: { name: 'Steve' },
         to: { name: 'John' },
@@ -37,16 +39,9 @@ class App extends Component {
     
     this.openLoader = this.openLoader.bind(this);
     this.closeLoader = this.closeLoader.bind(this);
-  }
-  componentDidMount() {
-    this.openLoader();
-    this.state.LocationService.getLocation()
-      .then(() => {
-        this.closeLoader();
-      })
-      .catch(() => {
-        this.closeLoader();
-      })
+    this.openAlert = this.openAlert.bind(this);
+    this.userLogin = this.userLogin.bind(this);
+    this.userRegister = this.userRegister.bind(this);
   }
   render() {
     return (
@@ -54,23 +49,44 @@ class App extends Component {
         <Switch>
           <Route exact path='/' 
             render={(props) => (
-              <BlockPageContainer>
-                <BlockDashboard 
-                  apiservice={this.state.APIService} 
-                  locationservice={this.state.LocationService}
-                  openconversations={this.state.openConversations} />
-              </BlockPageContainer>
+              this.state.user ?
+                <BlockPageContainer>
+                  <BlockDashboardPage 
+                    apiservice={this.state.APIService} 
+                    locationservice={this.state.LocationService}
+                    openconversations={this.state.openConversations} />
+                </BlockPageContainer> :
+                <BlockPageContainer>
+                  <BlockAuthorizationPage
+                    apiservice={this.state.APIService} 
+                    locationservice={this.state.LocationService}
+                    userlogin={this.userLogin}
+                    userregister={this.userRegister}
+                    showloader={this.openLoader}
+                    closeloader={this.closeLoader}
+                    showalert={this.openAlert} />
+                </BlockPageContainer>
             )}/>
         </Switch>
-        <BlockLoader message={this.state.loadingMessage} ref="loader"/>
+        <BlockLoader ref="loader" />
+        <BlockAlert ref="alert" />
       </div>
     );
   }
-  openLoader() {
-    this.refs.loader.open();
+  openLoader(message) {
+    this.refs.loader.open(message);
   }
   closeLoader() {
     this.refs.loader.close();
+  }
+  openAlert(message) {
+    this.refs.alert.open(message);
+  }
+  userLogin(user) {
+    this.setState({ user });
+  }
+  userRegister(user) {
+    this.setState({ user });
   }
 }
 

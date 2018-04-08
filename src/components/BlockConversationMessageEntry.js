@@ -13,7 +13,8 @@ const input = {
   padding: '10px',
   fontFamily: "'Roboto', sans-serif",
   lineHeight: '1.5',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  border: 'none'
 }
 
 const sendButton = {

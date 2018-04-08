@@ -7,7 +7,7 @@ const openStyle = {
   top: '0',
   width: '100vw',
   height: '100vh',
-  zIndex: '100',
+  zIndex: '1000',
   backgroundColor: 'rgba(0,0,0,0.8)'
 }
 
@@ -20,7 +20,7 @@ const loaderStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%,-50%)',
-  zIndex: '101'
+  zIndex: '1001'
 }
 
 const messageStyle = {
@@ -32,7 +32,8 @@ class BlockLoader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      message: 'Loading...'
     }
     
     this.open = this.open.bind(this);
@@ -48,16 +49,16 @@ class BlockLoader extends Component {
             <div className="sk-cube4 sk-cube"></div>
             <div className="sk-cube3 sk-cube"></div>
           </div>
-          <span style={messageStyle}>{this.props.message}</span>
+          <span style={messageStyle}>{this.state.message}</span>
         </div>
       </div>
     );
   }
-  open() {
-    this.setState({ open: true });
+  open(message) {
+    this.setState({ open: true, message: message });
   }
   close() {
-    this.setState({ open: false });
+    this.setState({ open: false, message: 'Loading...' });
   }
 }
 

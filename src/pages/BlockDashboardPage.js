@@ -20,13 +20,16 @@ const navWrapperStyle = {
 }
 
 const feedWrapperStyle = {
-  marginTop: '140px'
+  marginTop: '140px',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center'
 }
 
-class BlockDashboard extends Component {
+class BlockDashboardPage extends Component {
   render() {
     return (
-      <div className="BlockDashboard" style={style}>
+      <div className="BlockDashboardPage" style={style}>
         <div style={navWrapperStyle}>
           <BlockNavigation 
           apiservice={this.props.apiservice}
@@ -39,7 +42,7 @@ class BlockDashboard extends Component {
         <BlockPeopleList />
         {this.props.openconversations.map((conversation, i) => {
           return(
-            <BlockConversation conversation={conversation} />
+            <BlockConversation conversation={conversation} key={i} />
           )
         })}
       </div>
@@ -47,4 +50,4 @@ class BlockDashboard extends Component {
   }
 }
 
-export default BlockDashboard;
+export default BlockDashboardPage;

@@ -16,7 +16,8 @@ const input = {
   fontFamily: "'Roboto', sans-serif",
   resize: 'none',
   lineHeight: '1.5',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  border: 'none'
 }
 
 const postButton = {

@@ -5,7 +5,7 @@ import BlockPostAttachment from './BlockPostAttachment';
 import BlockPostFooter from './BlockPostFooter';
 
 const style = {
-  flex: '1 1 calc(33% - 10px)',
+  flex: '1 1 calc(50% - 10px)',
   boxSizing: 'border-box',
   margin: '5px',
   backgroundColor: '#FFFFFF',
