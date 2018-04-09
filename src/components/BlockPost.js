@@ -5,7 +5,7 @@ import BlockPostAttachment from './BlockPostAttachment';
 import BlockPostFooter from './BlockPostFooter';
 
 const style = {
-  flex: '1 1 calc(50% - 10px)',
+  flex: '1 1 calc(100% - 10px)',
   boxSizing: 'border-box',
   margin: '5px',
   backgroundColor: '#FFFFFF',
@@ -18,24 +18,22 @@ const style = {
 
 class BlockPost extends Component {
   render() {
-    if (this.props.post.attachment) {
-      return (
-        <div className="BlockPost" style={style}>
-          <BlockPostHeader post={this.props.post} />
-          <BlockPostAttachment post={this.props.post} />
-          <BlockPostContent post={this.props.post} />
-          <BlockPostFooter post={this.props.post} />
-        </div>
-      );
-    } else {
-      return (
-        <div className="BlockPost" style={style}>
-          <BlockPostHeader post={this.props.post} />
-          <BlockPostContent post={this.props.post} />
-          <BlockPostFooter post={this.props.post} />
-        </div>
-      );
-    }
+    return (
+      <div className="BlockPost" style={style}>
+        <BlockPostHeader 
+          apiservice={this.props.apiservice}
+          showalert={this.props.showalert}
+          getuserupdate={this.props.getuserupdate}
+          post={this.props.post} 
+          user={this.props.user} />
+        {this.props.post.Attachments.length ?
+          <BlockPostAttachment post={this.props.post} /> :
+          ''
+        }
+        <BlockPostContent post={this.props.post} />
+        <BlockPostFooter post={this.props.post} />
+      </div>
+    );
   }
 }
 

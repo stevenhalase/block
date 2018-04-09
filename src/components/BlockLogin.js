@@ -132,7 +132,7 @@ class BlockLogin extends Component {
         if (location) {
           user.Location = {
             Latitude: location.latitude,
-            Longitidue: location.longitude,
+            Logitude: location.longitude,
             Date: new Date()
           };
           _this.props.showloader('Logging in...');

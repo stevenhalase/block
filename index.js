@@ -31,6 +31,9 @@ app.use(function(req, res, next) {
 let UserRoutes = require('./routes/UserRoutes');
 app.use('/api/v1/users', UserRoutes);
 
+let PostRoutes = require('./routes/PostRoutes');
+app.use('/api/v1/posts', PostRoutes);
+
 
 app.use(express.static(__dirname + '/build'));
 

@@ -12,7 +12,7 @@ class BlockPostContent extends Component {
   render() {
     return (
       <div className="BlockPostContent" style={style}>
-        <p>{this.props.post.content}</p>
+        <p>{this.props.post.Content}</p>
       </div>
     );
   }

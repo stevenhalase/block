@@ -25,11 +25,41 @@ module.exports = {
     },
 
     /**
+     * UserController.getUser()
+     */
+    getUser: function (req, res) {
+        UserModel.findOne({_id: req.params.id})
+            .populate('People.User')
+            .populate('PersonRequests.From')
+            .populate('PersonRequests.To')
+            .populate('Notifications.RelatedUser')
+            .exec(function (err, User) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting User.',
+                        error: err
+                    });
+                }
+                if (!User) {
+                    return res.status(404).json({
+                        message: 'No such User'
+                    });
+                } else {
+                    res.json(User);
+                }
+            });
+    },
+
+    /**
      * UserController.login()
      */
     login: function (req, res) {
         console.log('HERE: ' + req.body.Password)
         UserModel.findOne({ EmailAddress: req.body.EmailAddress})
+            .populate('People.User')
+            .populate('PersonRequests.From')
+            .populate('PersonRequests.To')
+            .populate('Notifications.RelatedUser')
             .exec(function (err, User) {
                 if (err) {
                     return res.status(500).json({
@@ -57,7 +87,7 @@ module.exports = {
                                 return res.json(User);
                             })
                         } else {
-
+                            return res.json(User);
                         }
                     } else {
                         return res.json({
@@ -108,6 +138,47 @@ module.exports = {
                     });
                 }
             });
+    },
+
+    /**
+     * UserController.personRequest()
+     */
+    personRequest: function (req, res) {
+        var request = req.body;
+        var fromId = request.From._id;
+        var toId = request.To._id;
+        let ids = [fromId, toId];
+        console.log('REQUEST: ' + request, 'FROM: ' + fromId, 'TO: ' + toId)
+        UserModel.update({_id: toId}, {$push: {Notifications: {RelatedUser: fromId, Type: 'personrequest', Date: new Date()}}}, function(err, User) {
+            if (err) { console.log(error) }
+        });
+        UserModel.update({_id: { $in: ids }}, {$push: {PersonRequests: request}}, {multi: true})
+            .exec(function(err) {
+                if (err) {
+                    return res.json({
+                        message: 'Error processing request.',
+                        error: err
+                    });
+                }
+                return res.json(true);
+            });
+    },
+
+    /**
+     * UserController.personRequestApprove()
+     */
+    personRequestApprove: function (req, res) {
+        var request = req.body;
+        var fromId = request.fromId;
+        var toId = request.toId;
+        console.log('REQUEST: ' + request, 'FROM: ' + fromId, 'TO: ' + toId)
+        UserModel.update({_id: toId}, {$push: {People: {User: fromId, Date: request.date}}, $pull: {Notifications: {relatedId: fromId}}}, function(err, User) {
+            if (err) { console.log(error) }
+        });
+        UserModel.update({_id: fromId}, {$push: {People: {User: toId, Date: request.date}}}, function(err, User) {
+            if (err) { console.log(error) }
+        });
+        return res.json(true);
     },
 
     /**
@@ -163,3 +234,7 @@ module.exports = {
         });
     }
 };
+
+function manualPopulateNotifications() {
+
+}

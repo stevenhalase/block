@@ -10,7 +10,8 @@ const darkStyle = {
 
 const logoStyle = {
   fontSize: '24px',
-  fontWeight: '200'
+  fontWeight: '200',
+  margin: '0'
 }
 
 class BlockLogo extends Component {

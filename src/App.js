@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import APIService from './services/APIService';
 import LocationService from './services/LocationService';
+import StorageService from './services/StorageService';
 import BlockDashboardPage from './pages/BlockDashboardPage';
 
 import './App.css';
@@ -17,6 +18,7 @@ class App extends Component {
     this.state = {
       APIService: new APIService(),
       LocationService: new LocationService(),
+      StorageService: new StorageService(),
       user: null,
       openConversations: [{
         from: { name: 'Steve' },
@@ -41,7 +43,13 @@ class App extends Component {
     this.closeLoader = this.closeLoader.bind(this);
     this.openAlert = this.openAlert.bind(this);
     this.userLogin = this.userLogin.bind(this);
+    this.userLogout = this.userLogout.bind(this);
     this.userRegister = this.userRegister.bind(this);
+    this.getLocalUser = this.getLocalUser.bind(this);
+    this.getUserUpdate = this.getUserUpdate.bind(this);
+  }
+  componentWillMount() {
+    this.getLocalUser();
   }
   render() {
     return (
@@ -51,10 +59,14 @@ class App extends Component {
             render={(props) => (
               this.state.user ?
                 <BlockPageContainer>
-                  <BlockDashboardPage 
+                  <BlockDashboardPage
+                    user={this.state.user}
                     apiservice={this.state.APIService} 
                     locationservice={this.state.LocationService}
-                    openconversations={this.state.openConversations} />
+                    showalert={this.openAlert}
+                    openconversations={this.state.openConversations}
+                    userlogout={this.userLogout}
+                    getuserupdate={this.getUserUpdate} />
                 </BlockPageContainer> :
                 <BlockPageContainer>
                   <BlockAuthorizationPage
@@ -83,10 +95,33 @@ class App extends Component {
     this.refs.alert.open(message);
   }
   userLogin(user) {
+    this.state.StorageService.setUser(user);
     this.setState({ user });
   }
+  userLogout() {
+    this.state.StorageService.clearUser();
+    this.setState({ user: null });
+  }
   userRegister(user) {
+    this.state.StorageService.setUser(user);
     this.setState({ user });
+  }
+  getLocalUser() {
+    let user = this.state.StorageService.getUser();
+    if (user) {
+      this.setState({ user });
+    }
+  }
+  getUserUpdate() {
+    this.state.APIService.getUser(this.state.user._id)
+      .then(response => {
+        let user = response.data;
+        this.state.StorageService.setUser(user);
+        this.setState({ user });
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 }
 

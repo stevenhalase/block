@@ -13,13 +13,19 @@ const style = {
 }
 
 const navWrapperStyle = {
+  width: '80%',
+  maxWidth: '768px',
   position: 'fixed',
   top: '0',
   borderTop: '25px solid #dfe6e9',
-  borderBottom: '25px solid #dfe6e9'
+  borderBottom: '25px solid #dfe6e9',
+  zIndex: '100'
 }
 
 const feedWrapperStyle = {
+  width: '80%',
+  maxWidth: '768px',
+  position: 'relative',
   marginTop: '140px',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -27,17 +33,35 @@ const feedWrapperStyle = {
 }
 
 class BlockDashboardPage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.updateFeed = this.updateFeed.bind(this);
+  }
   render() {
     return (
       <div className="BlockDashboardPage" style={style}>
         <div style={navWrapperStyle}>
           <BlockNavigation 
-          apiservice={this.props.apiservice}
-          locationservice={this.props.locationservice} />
+            user={this.props.user}
+            apiservice={this.props.apiservice}
+            locationservice={this.props.locationservice}
+            showalert={this.props.showalert}
+            userlogout={this.props.userlogout}
+            getuserupdate={this.props.getuserupdate} />
         </div>
         <div style={feedWrapperStyle}>
-          <BlockPostEntry />
-          <BlockFeed apiservice={this.props.apiservice}/>
+          <BlockPostEntry 
+            user={this.props.user}
+            apiservice={this.props.apiservice}
+            showalert={this.props.showalert}
+            newpost={this.updateFeed} />
+          <BlockFeed 
+            user={this.props.user}
+            apiservice={this.props.apiservice}
+            showalert={this.props.showalert}
+            getuserupdate={this.props.getuserupdate}
+            ref="feed" />
         </div>
         <BlockPeopleList />
         {this.props.openconversations.map((conversation, i) => {
@@ -47,6 +71,9 @@ class BlockDashboardPage extends Component {
         })}
       </div>
     );
+  }
+  updateFeed() {
+    this.refs.feed.update();
   }
 }
 

@@ -5,17 +5,21 @@ import mockdata from './mockdata';
 export default class APIService {
   constructor() {
     // this.base = 'http://localhost:3080/api/v1/';
-    this.base = 'https://block-dev.herokuapp.com/api/v1/';
+    this.base = window.location.hostname === 'localhost' ?
+      'http://localhost:3080/api/v1/' :
+      'https://block-dev.herokuapp.com/api/v1/';
     this.routes = {
-      getPosts: 'posts',
+      posts: 'posts',
       users: 'users'
     }
   }
 
   getPosts() {
-    return new Promise((resolve, reject) => {
-      resolve(mockdata);
-    })
+    return axios.get(this.base+this.routes.posts);
+  }
+
+  submitPost(post) {
+    return axios.post(this.base+this.routes.posts, post)
   }
 
   registerUser(user) {
@@ -25,5 +29,16 @@ export default class APIService {
   loginUser(user) {
     return axios.post(this.base+this.routes.users+'/login', user);
   }
-  
+
+  getUser(userId) {
+    return axios.get(this.base+this.routes.users+'/'+userId);
+  }
+
+  personRequest(request) {
+    return axios.post(this.base+this.routes.users+'/personrequest', request);
+  }
+
+  approvePersonRequest(request) {
+    return axios.post(this.base+this.routes.users+'/personrequest/approve', request);
+  }
 }

@@ -8,6 +8,11 @@ var UserController = require('../controllers/UserController.js');
 router.get('/', UserController.list);
 
 /*
+ * GET
+ */
+router.get('/:id', UserController.getUser);
+
+/*
  * POST
  */
 router.post('/login', UserController.login);
@@ -16,6 +21,16 @@ router.post('/login', UserController.login);
  * POST
  */
 router.post('/register', UserController.register);
+
+/*
+ * POST
+ */
+router.post('/personrequest', UserController.personRequest);
+
+/*
+ * POST
+ */
+router.post('/personrequest/approve', UserController.personRequestApprove);
 
 /*
  * PUT

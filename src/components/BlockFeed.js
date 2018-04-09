@@ -3,8 +3,8 @@ import BlockPost from './BlockPost';
 import BlockFeedControls from './BlockFeedControls';
 
 const style = {
-  margin: '15px',
-  width: '768px',
+  margin: '20px 0',
+  width: '100%',
   overflow: 'hidden',
   display: 'flex',
   flexWrap: 'wrap'
@@ -19,39 +19,63 @@ class BlockFeed extends Component {
       dateSortDescending: true
     }
 
-    this.props.apiservice.getPosts()
-      .then(posts => {
-
-        this.setState({
-          posts: posts,
-          displayedPosts: this.sortPosts(posts).slice(0,12)
-        }, this.sortDisplayedPosts);
-        this.attachInfiniteScroll();
-      })
-
     this.sortDisplayedPosts = this.sortDisplayedPosts.bind(this);
     this.sortPosts = this.sortPosts.bind(this);
     this.handleDateToggle = this.handleDateToggle.bind(this);
     this.attachInfiniteScroll = this.attachInfiniteScroll.bind(this);
     this.loadMorePosts = this.loadMorePosts.bind(this);
+    this.update = this.update.bind(this);
+  }
+  componentDidMount() {
+    this.props.apiservice.getPosts()
+      .then(response => {
+        let posts = response.data;
+        if (posts.length) {
+          this.setState({
+            posts: posts,
+            displayedPosts: this.sortPosts(posts).slice(0,12)
+          }, this.sortDisplayedPosts);
+          this.attachInfiniteScroll();
+        }
+      })
   }
   render() {
     return (
       <div className="BlockFeed" style={style}>
-        <BlockFeedControls descending={this.state.dateSortDescending} handledatetoggle={this.handleDateToggle} />
+        <BlockFeedControls 
+          descending={this.state.dateSortDescending} 
+          handledatetoggle={this.handleDateToggle} />
         {this.state.displayedPosts.map((post, i) => {   
-           return (<BlockPost post={post} key={i} />) 
+           return (<BlockPost 
+                      apiservice={this.props.apiservice} 
+                      post={post} user={this.props.user} 
+                      showalert={this.props.showalert}
+                      getuserupdate={this.props.getuserupdate}
+                      key={i} />) 
         })}
       </div>
     );
+  }
+  update() {
+    this.props.apiservice.getPosts()
+      .then(response => {
+        let posts = response.data;
+        if (posts.length) {
+          this.setState({
+            posts: posts,
+            displayedPosts: this.sortPosts(posts).slice(0,12)
+          }, this.sortDisplayedPosts);
+          this.attachInfiniteScroll();
+        }
+      })
   }
   sortDisplayedPosts() {
     let displayedPosts = this.state.displayedPosts;
     displayedPosts.sort((a, b) => {
       if (this.state.dateSortDescending) {
-        return new Date(b.date) - new Date(a.date);
+        return new Date(b.Date) - new Date(a.Date);
       } else {
-        return new Date(a.date) - new Date(b.date);
+        return new Date(a.Date) - new Date(b.Date);
       }
     })
     this.setState({displayedPosts});
@@ -60,9 +84,9 @@ class BlockFeed extends Component {
     var sortedPosts = posts;
     sortedPosts.sort((a, b) => {
       if (this.state.dateSortDescending) {
-        return new Date(b.date) - new Date(a.date);
+        return new Date(b.Date) - new Date(a.Date);
       } else {
-        return new Date(a.date) - new Date(b.date);
+        return new Date(a.Date) - new Date(b.Date);
       }
     })
     return sortedPosts;

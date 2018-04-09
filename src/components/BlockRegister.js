@@ -136,7 +136,7 @@ class BlockRegister extends Component {
         if (location) {
           user.Locations = [{
             Latitude: location.latitude,
-            Longitidue: location.longitude,
+            Longitude: location.longitude,
             Date: new Date()
           }];
           _this.props.showloader('Completing registration...');
