@@ -33,13 +33,7 @@ class BlockPeopleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
-      demoList: [
-        'John',
-        'Joe',
-        'James',
-        'Jack'
-      ]
+      expanded: false
     }
 
     this.toggleExpand = this.toggleExpand.bind(this);
@@ -49,9 +43,12 @@ class BlockPeopleList extends Component {
       <div className="BlockPeopleList" style={style}>
         <BlockPeopleListHeader toggleexpand={this.toggleExpand} />
         <div style={this.state.expanded ? expandedListContainer : listContainer}>
-          {this.state.demoList.map((person, i) => {
+          {this.props.user.People.map((person, i) => {
             return (
-              <BlockPeopleListPerson personname={person} key={i} />
+              <BlockPeopleListPerson 
+                person={person.User}
+                openconversation={this.props.openconversation}
+                key={i} />
             )
           })}
         </div>

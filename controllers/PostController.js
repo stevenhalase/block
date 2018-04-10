@@ -1,4 +1,4 @@
-var PostModel = require('../models/PostModel.js');
+const PostModel = require('../models/PostModel.js');
 
 /**
  * PostController.js

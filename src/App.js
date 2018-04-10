@@ -11,6 +11,7 @@ import BlockPageContainer from './components/BlockPageContainer';
 import BlockLoader from './components/BlockLoader';
 import BlockAuthorizationPage from './pages/BlockAuthorizationPage';
 import BlockAlert from './components/BlockAlert';
+import SocketService from './services/SocketService';
 
 class App extends Component {
   constructor(props) {
@@ -19,24 +20,9 @@ class App extends Component {
       APIService: new APIService(),
       LocationService: new LocationService(),
       StorageService: new StorageService(),
+      SocketService: new SocketService(),
       user: null,
-      openConversations: [{
-        from: { name: 'Steve' },
-        to: { name: 'John' },
-        messages: [{
-          from: { name: 'Steve' },
-          to: { name: 'John' },
-          message: 'Hey man whats up?'
-        },{
-          from: { name: 'Steve' },
-          to: { name: 'John' },
-          message: 'Not much man'
-        },{
-          from: { name: 'Steve' },
-          to: { name: 'John' },
-          message: 'Cool beans'
-        }]
-      }]
+      openConversations: []
     }
     
     this.openLoader = this.openLoader.bind(this);
@@ -47,6 +33,11 @@ class App extends Component {
     this.userRegister = this.userRegister.bind(this);
     this.getLocalUser = this.getLocalUser.bind(this);
     this.getUserUpdate = this.getUserUpdate.bind(this);
+    this.openConversation = this.openConversation.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
+    this.deliverMessage = this.deliverMessage.bind(this);
+
+    this.state.SocketService.addBinding('Message:AttemptDelivery', this.deliverMessage);
   }
   componentWillMount() {
     this.getLocalUser();
@@ -64,7 +55,9 @@ class App extends Component {
                     apiservice={this.state.APIService} 
                     locationservice={this.state.LocationService}
                     showalert={this.openAlert}
+                    openconversation={this.openConversation}
                     openconversations={this.state.openConversations}
+                    sendmessage={this.sendMessage}
                     userlogout={this.userLogout}
                     getuserupdate={this.getUserUpdate} />
                 </BlockPageContainer> :
@@ -72,6 +65,7 @@ class App extends Component {
                   <BlockAuthorizationPage
                     apiservice={this.state.APIService} 
                     locationservice={this.state.LocationService}
+                    socketservice={this.state.SocketService}
                     userlogin={this.userLogin}
                     userregister={this.userRegister}
                     showloader={this.openLoader}
@@ -122,6 +116,47 @@ class App extends Component {
       .catch(error => {
         console.log(error);
       })
+  }
+  openConversation(to) {
+    let openConversations = this.state.openConversations;
+    let openConversationsInd = openConversations.findIndex(c => c.To._id === to._id || c.From._id === to._id);
+    if (openConversationsInd < 0) {
+      openConversations.push({
+        Id: Date.now(),
+        From: this.state.user,
+        To: to,
+        Messages: this.state.user.Messages.filter(m => m.To._id === to._id || m.From._id === to._id)
+      })
+      this.setState({ openConversations });
+    }
+  }
+  sendMessage(message) {
+    this.state.SocketService.sendMessage(message);
+
+    let openConversations = this.state.openConversations;
+    let openConversationsInd = openConversations.findIndex(c => c.Id === message.ConversationId);
+    if (openConversationsInd >= 0) {
+      openConversations[openConversationsInd].Messages.push(message);
+      this.setState({ openConversations });
+    }
+  }
+  deliverMessage(message) {
+    let openConversations = this.state.openConversations;
+    let conversationInd = openConversations.findIndex(c => c.To._id === message.From._id);
+    if (conversationInd >= 0) {
+      openConversations[conversationInd].Messages.push(message);
+      this.setState({ openConversations });
+    } else {
+      let previousMessages = this.state.user.Messages.filter(m => m.To._id === message.From._id || m.From._id === message.From._id);
+      previousMessages.push(message)
+      openConversations.push({
+        Id: Date.now(),
+        From: message.To,
+        To: message.From,
+        Messages: previousMessages
+      })
+      this.setState({ openConversations });
+    }
   }
 }
 

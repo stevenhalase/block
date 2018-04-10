@@ -1,4 +1,4 @@
-var UserModel = require('../models/UserModel.js');
+const UserModel = require('../models/UserModel.js');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
@@ -33,6 +33,8 @@ module.exports = {
             .populate('PersonRequests.From')
             .populate('PersonRequests.To')
             .populate('Notifications.RelatedUser')
+            .populate('Messages.From')
+            .populate('Messages.To')
             .exec(function (err, User) {
                 if (err) {
                     return res.status(500).json({
@@ -60,6 +62,8 @@ module.exports = {
             .populate('PersonRequests.From')
             .populate('PersonRequests.To')
             .populate('Notifications.RelatedUser')
+            .populate('Messages.From')
+            .populate('Messages.To')
             .exec(function (err, User) {
                 if (err) {
                     return res.status(500).json({
@@ -77,6 +81,7 @@ module.exports = {
                     if(bcrypt.compareSync(req.body.Password, User.Password)) {
                         if (req.body.Location) {
                             User.Locations.push(req.body.Location);
+                            User.SocketId = req.body.SocketId;
                             User.save(function(err, User) {
                                 if (err) {
                                     return res.json({
@@ -119,6 +124,7 @@ module.exports = {
                     });
                 } else {
                     var User = new UserModel({
+                        SocketId: req.body.SocketId,
                         FirstName : req.body.FirstName,
                         LastName : req.body.LastName,
                         EmailAddress : req.body.EmailAddress,

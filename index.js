@@ -1,6 +1,12 @@
 require('dotenv').config()
 const express = require('express');
 const app = express();
+const server = require('http').createServer(app); 
+const io = require('socket.io')(server);
+
+const SocketService = require('./socket');
+new SocketService(io);
+
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -37,6 +43,6 @@ app.use('/api/v1/posts', PostRoutes);
 
 app.use(express.static(__dirname + '/build'));
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('Server started at http://localhost:' + port);
 })

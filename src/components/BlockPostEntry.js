@@ -37,6 +37,7 @@ class BlockPostEntry extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.validate = this.validate.bind(this);
+    this.submitPost = this.submitPost.bind(this);
   }
   render() {
     return (
@@ -55,24 +56,27 @@ class BlockPostEntry extends Component {
     let input = document.getElementById('post-entry-input');
     let postContent = input.value;
     if (postContent.length) {
-      let post = {
-        User: this.props.user._id,
-        Date: new Date(),
-        Content: postContent
-      }
-      this.props.apiservice.submitPost(post)
-        .then(post => {
-          input.value = '';
-          this.props.newpost();
-          this.props.showalert('Post created successfully...');
-        })
-        .catch(error => {
-          console.log(error);
-          this.props.showalert('Post creation failed...');
-        })
+      this.submitPost(input, postContent);
     } else {
       this.props.showalert('Post cannot be empty...');
     }
+  }
+  submitPost(input, postContent) {
+    let post = {
+      User: this.props.user._id,
+      Date: new Date(),
+      Content: postContent
+    }
+    this.props.apiservice.submitPost(post)
+      .then(post => {
+        input.value = '';
+        this.props.newpost();
+        this.props.showalert('Post created successfully...');
+      })
+      .catch(error => {
+        console.log(error);
+        this.props.showalert('Post creation failed...');
+      })
   }
 }
 

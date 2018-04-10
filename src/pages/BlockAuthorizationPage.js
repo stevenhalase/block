@@ -47,6 +47,7 @@ class BlockAuthorizationPage extends Component {
               login={this.handleLoginSwitch}
               apiservice={this.props.apiservice}
               locationservice={this.props.locationservice}
+              socketservice={this.props.socketservice}
               userregister={this.props.userregister}
               showloader={this.props.showloader}
               closeloader={this.props.closeloader}
@@ -63,6 +64,7 @@ class BlockAuthorizationPage extends Component {
               register={this.handleRegisterSwitch} 
               apiservice={this.props.apiservice} 
               locationservice={this.props.locationservice}
+              socketservice={this.props.socketservice}
               userlogin={this.props.userlogin}
               showloader={this.props.showloader}
               closeloader={this.props.closeloader}

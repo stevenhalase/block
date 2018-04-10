@@ -120,6 +120,7 @@ class BlockLogin extends Component {
   }
   submitLogin() {
     let user = {
+      SocketId: this.props.socketservice.socket.id,
       EmailAddress: document.getElementById('login-emailaddress').value,
       Password: document.getElementById('login-password').value
     }

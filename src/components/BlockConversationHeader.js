@@ -23,7 +23,7 @@ class BlockConversationListHeader extends Component {
     return (
       <div className="BlockConversationListHeader" style={style} onClick={this.props.toggleexpand}>
         <BlockAvatar imagesrc={'https://robohash.org/fugitcorruptiexercitationem.bmp?size=50x50&set=set1'} size={15} />
-        <div style={nameContainer}>{this.props.person.name}</div>
+        <div style={nameContainer}>{this.props.person.FirstName + ' ' + this.props.person.LastName}</div>
       </div>
     );
   }

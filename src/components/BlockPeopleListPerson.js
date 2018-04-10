@@ -37,20 +37,32 @@ const messageButton = {
 }
 
 class BlockPeopleListPerson extends Component {
+  constructor(props) {
+    super(props);
+
+    this.openConversation = this.openConversation.bind(this);
+  }
   render() {
     return (
       <div className="BlockPeopleListPerson" style={style}>
         <div style={detailContainer}>
           <BlockAvatar imagesrc={'https://robohash.org/fugitcorruptiexercitationem.bmp?size=50x50&set=set1'} size={25} />
-          <div style={nameContainer}>{this.props.personname}</div>
+          <div style={nameContainer}>{this.props.person.FirstName + ' ' + this.props.person.LastName}</div>
         </div>
         <div style={actionContainer}>
           <button style={messageButton}>
-            <Ionicon icon="ios-text-outline" color="#FFFFFF" fontSize="16px" />
+            <Ionicon 
+              icon="ios-text-outline" 
+              color="#FFFFFF" 
+              fontSize="16px"
+              onClick={this.openConversation} />
           </button>
         </div>
       </div>
     );
+  }
+  openConversation() {
+    this.props.openconversation(this.props.person);
   }
 }
 

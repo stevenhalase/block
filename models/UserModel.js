@@ -36,6 +36,21 @@ var UserSchema = new Schema({
 			type: Schema.Types.ObjectId,
 			ref: 'User'
 		}
+	}],
+	'SocketId': String,
+	'Messages': [{
+		'Message': String,
+		'Sent': Date,
+		'ProcessedByServer': Date,
+		'Delivered': Date,
+		'From': {
+			type: Schema.Types.ObjectId,
+			ref: 'User'
+		},
+		'To': {
+			type: Schema.Types.ObjectId,
+			ref: 'User'
+		}
 	}]
 });
 

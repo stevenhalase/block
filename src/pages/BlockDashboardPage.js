@@ -63,10 +63,16 @@ class BlockDashboardPage extends Component {
             getuserupdate={this.props.getuserupdate}
             ref="feed" />
         </div>
-        <BlockPeopleList />
+        <BlockPeopleList 
+            user={this.props.user}
+            openconversation={this.props.openconversation} />
         {this.props.openconversations.map((conversation, i) => {
           return(
-            <BlockConversation conversation={conversation} key={i} />
+            <BlockConversation
+              user={this.props.user}
+              conversation={conversation}
+              sendmessage={this.props.sendmessage}
+              key={i} />
           )
         })}
       </div>

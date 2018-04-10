@@ -82,41 +82,47 @@ class BlockNotifications extends Component {
     if(this.state.opened) {
       return (
         <div className="BlockNotifications" style={style}>
-            <Ionicon 
-              icon="ios-notifications-outline" 
-              color="#FFFFFF" 
-              fontSize="24px"
-              style={iconStyle}
-              onClick={this.toggleOpen} />
-            <div style={notificationBadge}>{this.props.user.Notifications.length}</div>
-            {this.props.user.Notifications.length ?
-              <div style={notificationsContainer}>
-                <div style={notificationsHeader}>Notifications</div>
-                {this.props.user.Notifications.map((notification, i) => {
-                  return(
-                    <div style={notificationContainer} key={i}>
-                      <div style={notificationText}>
-                        {notification.RelatedUser.FirstName + ' ' + notification.RelatedUser.LastName}
-                      </div>
-                      <button style={notificationActionButton} onClick={(e) => { this.approvePersonRequest(notification) }}>Accept</button>
+          <Ionicon 
+            icon="ios-notifications-outline" 
+            color="#FFFFFF" 
+            fontSize="24px"
+            style={iconStyle}
+            onClick={this.toggleOpen} />
+          {this.props.user.Notifications.length > 0 ?
+            <div style={notificationBadge}>{this.props.user.Notifications.length}</div> :
+            ''
+          }
+          {this.props.user.Notifications.length ?
+            <div style={notificationsContainer}>
+              <div style={notificationsHeader}>Notifications</div>
+              {this.props.user.Notifications.map((notification, i) => {
+                return(
+                  <div style={notificationContainer} key={i}>
+                    <div style={notificationText}>
+                      {notification.RelatedUser.FirstName + ' ' + notification.RelatedUser.LastName}
                     </div>
-                  )
-                })}
-              </div> :
-              ''
-            } 
+                    <button style={notificationActionButton} onClick={(e) => { this.approvePersonRequest(notification) }}>Accept</button>
+                  </div>
+                )
+              })}
+            </div> :
+            ''
+          } 
         </div>
       );
     } else {
       return (
         <div className="BlockNotifications" style={style}>
-            <Ionicon 
-              icon="ios-notifications-outline" 
-              color="#FFFFFF" 
-              fontSize="24px"
-              style={iconStyle}
-              onClick={this.toggleOpen} />
-            <div style={notificationBadge}>{this.props.user.Notifications.length}</div>
+          <Ionicon 
+            icon="ios-notifications-outline" 
+            color="#FFFFFF" 
+            fontSize="24px"
+            style={iconStyle}
+            onClick={this.toggleOpen} />
+          {this.props.user.Notifications.length > 0 ?
+            <div style={notificationBadge}>{this.props.user.Notifications.length}</div> :
+            ''
+          }
         </div>
       );
     }

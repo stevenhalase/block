@@ -1,4 +1,4 @@
-export default class APIService {
+export default class StorageService {
   constructor() {
     this.storageSupported = this.checkStorageSupported();
   }

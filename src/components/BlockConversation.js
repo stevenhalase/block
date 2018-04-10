@@ -36,21 +36,24 @@ class BlockConversation extends Component {
     if (this.state.expanded) {
       return (
         <div className="BlockConversation" style={style} onClick={this.props.toggleexpand}>
-          <BlockConversationListHeader toggleexpand={this.toggleExpand} person={this.props.conversation.to} />
+          <BlockConversationListHeader toggleexpand={this.toggleExpand} person={this.props.conversation.To} />
           <div style={messagesContainer}>
-            {this.props.conversation.messages.map((message, i) => {
+            {this.props.conversation.Messages.map((message, i) => {
               return (
-                <BlockConversationMessage incoming={i%2===0} message={message.message} key={i} />
+                <BlockConversationMessage incoming={message.To._id === this.props.user._id} message={message.Message} key={i} />
               )
             })}
           </div>
-          <BlockConversationMessageEntry />
+          <BlockConversationMessageEntry 
+            user={this.props.user}
+            conversation={this.props.conversation}
+            sendmessage={this.props.sendmessage} />
         </div>
       );
     } else {
       return (
         <div className="BlockConversation" style={style} onClick={this.props.toggleexpand}>
-          <BlockConversationListHeader toggleexpand={this.toggleExpand} person={this.props.conversation.to} />
+          <BlockConversationListHeader toggleexpand={this.toggleExpand} person={this.props.conversation.To} />
         </div>
       );
     }

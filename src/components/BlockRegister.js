@@ -122,6 +122,7 @@ class BlockRegister extends Component {
   }
   submitRegistration() {
     let user = {
+      SocketId: this.props.socketservice.socket.id,
       FirstName: document.getElementById('register-firstname').value,
       LastName: document.getElementById('register-lastname').value,
       EmailAddress: document.getElementById('register-emailaddress').value,
